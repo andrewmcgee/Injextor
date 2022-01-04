@@ -14,13 +14,13 @@ https://github.com/andrewmcgee/Injextor
 
 ### Cocoapods
 
-Injextor can be added to a project as a pod by adding the folloing to your `Podfile` under the correct target:
+Injextor can be added to a project as a pod by adding the following to your `Podfile` under the correct target:
 
 ```
-pod 'Injextor', '~> 0.1.0'
+pod 'Injextor', '~> 0.1.1'
 ```
 
-and then running the following command in yout terminal:
+and then running the following command in your terminal:
 
 ```
 pod install
@@ -28,10 +28,10 @@ pod install
 
 ## Usage
 
-To use dependencies they must first me registered with a resolver (`ResolverType`), usually when the application launches.
+To use dependencies they must first be registered with a resolver (`ResolverType`), usually when the application launches.
 
 The `Resolvers` singleton class stores 2 x default `ResolverType` values as properties (one for unique dependencies and the other for singletons). 
-(Please note: These can be overridden if you you wish, or you can store you own `ResolverType` values in a place of your own choosing.)
+(Please note: These can be overridden if you wish, or you can store you own `ResolverType` values in a place of your own choosing.)
 
 Use the `ResolverType` values belonging to the `Resolvers` class to register dependencies:
 
