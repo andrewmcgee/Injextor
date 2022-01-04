@@ -16,7 +16,6 @@ enum Lazy<T> {
     /// The state of `self` after the `wrappedValue` has been accessed and initialized.
     case initialized(T)
     
-    
     /// Initializes an instance of `Lazy` with the given `wrappedValue` (provided as an autoclosure). Closures should not be provided. Use `init(builder:)` instead.
     /// - Parameter wrappedValue: A type (provided as an autoclosure) which is not initialized until it is first accessed.
     init(wrappedValue: @autoclosure @escaping () -> T) {
