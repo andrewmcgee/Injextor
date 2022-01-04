@@ -16,13 +16,10 @@ public class SingletonResolver: ResolverType {
     /// Registers a type for dependency injection with this `ResolverType`. Only class types are supported.
     ///  - parameter builder: A closure (or type provided as an autoclosure) used to build a new singleton instance of a dependency.
     public func register<T>(_ builder: @autoclosure @escaping () -> T) {
-        guard T.self is AnyObject.Type else {
-            fatalError("Only class types are supported by this SingletonResolver.")
-        }
         guard builders[ObjectIdentifier(T.self)] == nil else {
             fatalError("\(T.self) has already been registered with this singleton resolver.")
         }
-        builders[ObjectIdentifier(T.self)] = Lazy(wrappedValue: builder)
+        builders[ObjectIdentifier(T.self)] = Lazy(builder: builder)
     }
     
     /// Resolves a type that has been previously registered with this `ResolverType`. In each case it will be the same singleton instance.
@@ -30,6 +27,9 @@ public class SingletonResolver: ResolverType {
     public func resolve<T>() -> T {
         guard let lazyValue = builders[ObjectIdentifier(T.self)]?.wrappedValue as? T else {
             fatalError("\(T.self) has not been registered with this resolver.")
+        }
+        guard type(of: lazyValue as Any) is AnyObject.Type else {
+            fatalError("Only class types are supported by this SingletonResolver.")
         }
         return lazyValue
     }

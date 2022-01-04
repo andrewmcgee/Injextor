@@ -17,10 +17,16 @@ enum Lazy<T> {
     case initialized(T)
     
     
-    /// Initializes an instance of `Lazy` with the given `wrappedValue`.
-    /// - Parameter wrappedValue: An closure (or type provided as an autoclosure) which is not called or  initialized until it is first accessed.
+    /// Initializes an instance of `Lazy` with the given `wrappedValue` (provided as an autoclosure). Closures should not be provided. Use `init(builder:)` instead.
+    /// - Parameter wrappedValue: A type (provided as an autoclosure) which is not initialized until it is first accessed.
     init(wrappedValue: @autoclosure @escaping () -> T) {
         self = .uninitialized(wrappedValue)
+    }
+    
+    /// Initializes an instance of `Lazy` with the given builder closure. The return value of the closure will become the `wrappedValue`.
+    /// - Parameter wrappedValue: A closure returning the `wrappedValue` which is not called until the `wrappedValue` it is first accessed.
+    init(builder: @escaping () -> T) {
+        self = .uninitialized(builder)
     }
     
     /// Provides access to a value that is not initialized until it is first accessed.
