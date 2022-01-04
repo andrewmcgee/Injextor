@@ -33,4 +33,9 @@ public class SingletonResolver: ResolverType {
         }
         return lazyValue
     }
+    
+    /// Removes all stored dependencies.
+    public func removeAll() {
+        builders.removeAll()
+    }
 }

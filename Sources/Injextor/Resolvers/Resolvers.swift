@@ -23,4 +23,10 @@ public class Resolvers {
     
     /// Makes the `init` private.
     private init() {}
+    
+    /// Removes all stored dependencies from all resolvers.
+    public func removeAll() {
+        unique.removeAll()
+        singletons.removeAll()
+    }
 }

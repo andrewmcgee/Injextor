@@ -16,4 +16,7 @@ public protocol ResolverType {
     
     /// Resolves a type that has been previously registered with this `ResolverType`.
     func resolve<T>() -> T
+    
+    /// Removes all stored dependencies.
+    func removeAll()
 }

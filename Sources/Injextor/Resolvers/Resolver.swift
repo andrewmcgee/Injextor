@@ -27,4 +27,9 @@ public class Resolver: ResolverType {
         }
         return value
     }
+    
+    /// Removes all stored dependency builders.
+    public func removeAll() {
+        builders.removeAll()
+    }
 }
