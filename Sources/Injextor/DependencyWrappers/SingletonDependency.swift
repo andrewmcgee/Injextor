@@ -37,10 +37,10 @@ public struct SingletonDependency<T> {
         set { self = newValue }
     }
     
-    /// Overrides the `value` property with a custom value. If `nil` is passed then no override takes place.
-    /// - Parameter value: The value to use for the override.
-    public mutating func override(with value: T?) {
-        if let value = value {
+    /// Overrides the `value` property with a custom override value. If the case of the `DependencyOverride` is `.none`, then no override takes place.
+    /// - Parameter override: The value to use for the potential override.
+    public mutating func override(with override: DependencyOverride<T>) {
+        if case let .value(value) = override {
             self.value = value
         }
     }

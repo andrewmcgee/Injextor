@@ -12,7 +12,7 @@ class MockDependencyUseCase {
     @Dependency var mockUniqueDependency: MockDependencyType
     @SingletonDependency var mockSingletonDependency: MockDependencyType
     
-    init(uniqueDependency: Override<MockDependencyType> = .none) {
+    init(uniqueDependency: DependencyOverride<MockDependencyType> = .none) {
         $mockUniqueDependency.override(with: uniqueDependency)
     }
 }
