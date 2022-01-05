@@ -16,6 +16,6 @@ class MockDependencyUseCase {
     init(uniqueDependency: DependencyOverride<MockDependencyType> = .none,
          singletonDependency: DependencyOverride<MockDependencyType> = .none) {
         $mockUniqueDependency.override(with: uniqueDependency)
-        $mockSingletonDependency.override(with: uniqueDependency)
+        $mockSingletonDependency.override(with: singletonDependency)
     }
 }
