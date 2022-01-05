@@ -27,11 +27,7 @@ public struct SingletonDependency<T> {
     
     /// Provides the dependency as the property wrapper's wrapped value.
     public var wrappedValue: T {
-        mutating get {
-            value
-        }
-        set {
-            value = newValue
-        }
+        mutating get { value }
+        set { value = newValue }
     }
 }
