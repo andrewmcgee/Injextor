@@ -2,7 +2,7 @@
 //  DependencyOverride.swift
 //  Injextor
 //
-//  Created by Andrew Mcgee on 05/01/2022.
+//  Created by Andrew McGee on 05/01/2022.
 //
 
 import Foundation
