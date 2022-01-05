@@ -7,7 +7,7 @@
 
 import Foundation
 
-/// Property wrapper to hold a singleton class depdency. Registering non-class types with throw a fatal error.
+/// Property wrapper to hold a singleton class depdency. Registering non-class types will throw a fatal error (except Optional class types).
 @propertyWrapper
 class SingletonDependency<T>: Dependency<T> {
   
