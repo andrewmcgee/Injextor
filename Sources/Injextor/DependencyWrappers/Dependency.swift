@@ -22,6 +22,11 @@ public struct Dependency<T> {
     
     /// Provides the dependency as the property wrapper's wrapped value.
     public var wrappedValue: T {
-        get { value }
+        get {
+            value
+        }
+        set {
+            value = newValue
+        }
     }
 }
