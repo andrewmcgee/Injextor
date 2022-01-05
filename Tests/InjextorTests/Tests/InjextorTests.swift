@@ -29,10 +29,24 @@ final class InjextorTests: XCTestCase {
         XCTAssertNotEqual(mock.mockUniqueDependency.uuid, anotherMock.mockUniqueDependency.uuid)
     }
     
+    func testUniqueDependenciesCanBeOverridden() {
+        let mock = MockDependencyUseCase()
+        let anotherMock = MockDependencyUseCase()
+        mock.mockUniqueDependency = anotherMock.mockUniqueDependency
+        XCTAssertEqual(mock.mockUniqueDependency.uuid, anotherMock.mockUniqueDependency.uuid)
+    }
+    
     func testSingletonDependenciesAreTheSame() {
         let mock = MockDependencyUseCase()
         let anotherMock = MockDependencyUseCase()
         XCTAssertEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
+    }
+    
+    func testSingletonDependenciesCanBeOverridden() {
+        let mock = MockDependencyUseCase()
+        let anotherMock = MockDependencyUseCase()
+        anotherMock.mockSingletonDependency = MockDependency()
+        XCTAssertNotEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
     }
     
     func testSingletonDependenciesAreDifferentAfterAllDependenciesRemovedFromResolvers() {

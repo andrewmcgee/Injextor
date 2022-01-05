@@ -11,4 +11,8 @@ import Foundation
 class MockDependencyUseCase {
     @Dependency var mockUniqueDependency: MockDependencyType
     @SingletonDependency var mockSingletonDependency: MockDependencyType
+    
+    init(uniqueDependency: Override<MockDependencyType> = .none) {
+        $mockUniqueDependency.override(with: uniqueDependency)
+    }
 }

@@ -27,11 +27,21 @@ public struct SingletonDependency<T> {
     
     /// Provides the dependency as the property wrapper's wrapped value.
     public var wrappedValue: T {
-        mutating get {
-            value
-        }
-        set {
-            value = newValue
+        mutating get { value }
+        set { value = newValue }
+    }
+    
+    /// Provides access to this property wrapper's projected value of type `Self`, so additional methods can be accessed.
+    public var projectedValue: Self {
+        get { self }
+        set { self = newValue }
+    }
+    
+    /// Overrides the `value` property with a custom value. If `nil` is passed then no override takes place.
+    /// - Parameter value: The value to use for the override.
+    public mutating func override(with value: T?) {
+        if let value = value {
+            self.value = value
         }
     }
 }
