@@ -26,28 +26,32 @@ and then running the following command in your terminal:
 pod install
 ```
 
+## Background
+
+Objects depend on other objects (dependencies). Often these are stored as instance properties. Rather than having the parent object initiaize its own dependencies, it is good practice to inject them from the outside. This package/pod provides a simple strategy to achieve this.
+
+In sum, all dependecies must first be registered with a revolver. Objects can then have stored properies for any registered dependency (attributed by special property wrappers). Then when an object uses a dependency, the object (indirectly, through the property wrapper) asks the resolver to resolve an instance of the dependency and it is ready for use. Depending on the property wrapper used, these dependencies can be resolved as unique instances or shared singletons (classes only).
+
 ## Usage
 
-To use dependencies they must first be registered with a resolver (`ResolverType`), usually when the application launches.
+All resolvers must conform to the `ResolverType` protocol. There are two concrete implementaions of this protocol provided. A `Resolver` handles unique dependencies, whilst a `SingletonResolver` handles shared singletons.
+For simplicity there is also a `Resolvers` singleton class, which stores 2 x default `ResolverType` values as properties - one for unique dependencies and the other for singletons. (Please note: These can be overridden if you wish, or you can store you own `ResolverType` values in a place of your own choosing.)
 
-The `Resolvers` singleton class stores 2 x default `ResolverType` values as properties (one for unique dependencies and the other for singletons). 
-(Please note: These can be overridden if you wish, or you can store you own `ResolverType` values in a place of your own choosing.)
-
-Use the `ResolverType` values belonging to the `Resolvers` class to register dependencies:
+The easiest way to register dependencies is to use the `Resolvers` class to register dependencies as follows:
 
 ```
 Resolvers.shared.unique.register(Dependency())
 Resolvers.shared.singletons.register(SingletonDependency())
 ```
 
-Alternatively, if you are abstracting types behind protocols then remember to add `as DependencyType`:
+Alternatively, if you are abstracting types behind protocols then remember to add `as <DependencyProtocol>?`:
 
 ```
-Resolvers.shared.unique.register(Dependency() as DependencyType)
-Resolvers.shared.singletons.register(SingletonDependency() as SingletonDependencyType)
+Resolvers.shared.unique.register(Dependency() as DependencyProtocol)
+Resolvers.shared.singletons.register(SingletonDependency() as SingletonDependencyProtocol)
 ```
 
-Now you can use these dependencies throughout the app (where the values are initialised automatically with the previously registered values):
+Now you can use these dependencies throughout the app using specially defined property wrapper attributes (where the values are initialised automatically with the previously registered values):
 
 ```
 class SomeType {
@@ -58,7 +62,7 @@ class SomeType {
 }
 
 ```
-(Please note: If you want to use alternative `ResolverType` values from those `Resolvers`, then you can inject them into the property wrappers as follows:
+Please note: If you want to use alternative `ResolverType` values from those owned by the `Resolvers` singleton class, then you can inject them into the property wrappers as follows:
 
 ```
 @Dependency(resolver: someResolver) var uniqueDependency: DependencyType
