@@ -29,8 +29,8 @@ public class SingletonResolver: ResolverType {
         guard let value = builders[ObjectIdentifier(T.self)]?.wrappedValue as? T else {
             fatalError("\(T.self) has not been registered with this resolver.")
         }
-        guard type(of: value as Any) is AnyObject.Type || type(of: value as Any) is AnyOptional.Type else {
-            fatalError("Only class or Optional types are supported by this SingletonResolver.")
+        guard type(of: value as Any) is AnyObject.Type else {
+            fatalError("Only class types are supported by this SingletonResolver.")
         }
         return value
     }

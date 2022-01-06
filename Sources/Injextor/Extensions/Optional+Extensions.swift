@@ -9,9 +9,8 @@ import Foundation
 
 extension Optional: AnyOptional {
     
-    /// A method to return the type that is wrapped by the `Optional` as `Any.Type`, which can then be type casted as required.
-    /// - Returns: The type that is wrapped by the `Optional` as `Any.Type`, which can then be type casted as required.
-    func wrappedType() -> Any.Type {
-        return Wrapped.self
+    /// The type that is wrapped by the `Optional` as `Any.Type`, which can then be type casted as required.
+    var wrappedType: Any.Type {
+        Wrapped.self
     }
 }
