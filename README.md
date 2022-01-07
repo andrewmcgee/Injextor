@@ -17,7 +17,7 @@ https://github.com/andrewmcgee/Injextor
 Injextor can be added to a project as a pod by adding the following to your `Podfile` under the correct target:
 
 ```
-pod 'Injextor', '~> 0.1.1'
+pod 'Injextor', '~> 0.2.0'
 ```
 
 and then running the following command in your terminal:
