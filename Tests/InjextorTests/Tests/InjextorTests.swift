@@ -126,8 +126,8 @@ final class InjextorTests: XCTestCase {
     
     func testAlternativeResolversResolveDifferentSingletonDependencies() {
         let newDependency = MockDependency()
-        MockDependencyUseCaseWithAlternativeResolvers.uniqueResolver.register(newDependency as MockDependencyType)
-        MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register(newDependency as MockDependencyType)
+        MockDependencyUseCaseWithAlternativeResolvers.uniqueResolver.register { newDependency as MockDependencyType }
+        MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register { newDependency as MockDependencyType }
         let mock = MockDependencyUseCase()
         let alternativeMock = MockDependencyUseCaseWithAlternativeResolvers()
         XCTAssertNotEqual(mock.mockSingletonDependency.uuid, alternativeMock.mockSingletonDependency.uuid)
@@ -135,22 +135,22 @@ final class InjextorTests: XCTestCase {
     
     func testAlternativeResolversResolveSameUniqueDependenciesWhenSameAreRegistered() {
         let mock = MockDependencyUseCase()
-        MockDependencyUseCaseWithAlternativeResolvers.uniqueResolver.register(mock.mockUniqueDependency as MockDependencyType)
-        MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register(mock.mockSingletonDependency as MockDependencyType)
+        MockDependencyUseCaseWithAlternativeResolvers.uniqueResolver.register { mock.mockUniqueDependency as MockDependencyType }
+        MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register { mock.mockSingletonDependency as MockDependencyType }
         let alternativeMock = MockDependencyUseCaseWithAlternativeResolvers()
         XCTAssertEqual(mock.mockUniqueDependency.uuid, alternativeMock.mockUniqueDependency.uuid)
     }
     
     func testOptionalUniqueDependenciesCanBeRegisteredAsNil() throws {
         removeAllDependencies()
-        Resolvers.shared.unique.register(nil as MockDependencyType?)
+        Resolvers.shared.unique.register { nil as MockDependencyType? }
         let mock = MockOptionalDependencyUseCase()
         XCTAssertNil(mock.mockUniqueDependency)
     }
     
     func testOptionalUniqueDependenciesRegisteredAsNilCanBeOverriddenToNotNil() throws {
         removeAllDependencies()
-        Resolvers.shared.unique.register(nil as MockDependencyType?)
+        Resolvers.shared.unique.register { nil as MockDependencyType? }
         let mock = MockOptionalDependencyUseCase()
         XCTAssertNil(mock.mockUniqueDependency)
         mock.mockUniqueDependency = MockDependency()
@@ -158,10 +158,10 @@ final class InjextorTests: XCTestCase {
     }
     
     private func registerDependencies() {
-        Resolvers.shared.unique.register(MockDependency() as MockDependencyType)
-        Resolvers.shared.singletons.register(MockDependency() as MockDependencyType)
-        Resolvers.shared.unique.register(MockDependency() as MockDependencyType?)
-        Resolvers.shared.singletons.register(MockDependency() as MockDependencyType?)
+        Resolvers.shared.unique.register { MockDependency() as MockDependencyType }
+        Resolvers.shared.singletons.register { MockDependency() as MockDependencyType }
+        Resolvers.shared.unique.register { MockDependency() as MockDependencyType? }
+        Resolvers.shared.singletons.register { MockDependency() as MockDependencyType? }
     }
     
     private func removeAllDependencies() {

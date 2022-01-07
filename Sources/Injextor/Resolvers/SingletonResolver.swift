@@ -14,9 +14,9 @@ public class SingletonResolver: ResolverType {
     /// The wrapped value is lazy so it is not initialized until it is used the first time. Then it is stored here as a singleton.
     private var builders = [ObjectIdentifier: Lazy<Any>]()
     
-    /// Registers a type for dependency injection with this `ResolverType`. Only class types are supported.
-    ///  - parameter builder: A closure (or type provided as an autoclosure) used to build a new singleton instance of a dependency.
-    public func register<T>(_ builder: @autoclosure @escaping () -> T) {
+    /// Registers a type for dependency injection with this resolver.
+    ///  - parameter builder: A closure used to build a dependency.
+    public func register<T>(_ builder: @escaping () -> T) {
         guard builders[ObjectIdentifier(T.self)] == nil else {
             fatalError("\(T.self) has already been registered with this singleton resolver.")
         }

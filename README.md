@@ -40,15 +40,15 @@ For simplicity there is also a `Resolvers` singleton class, which stores 2 x def
 The easiest way to register dependencies is to use the `Resolvers` class to register dependencies as follows:
 
 ```
-Resolvers.shared.unique.register(Dependency())
-Resolvers.shared.singletons.register(SingletonDependency())
+Resolvers.shared.unique.register { Dependency() }
+Resolvers.shared.singletons.register { SingletonDependency() }
 ```
 
 Alternatively, if you are abstracting types behind protocols then remember to add `as <DependencyProtocol>?`:
 
 ```
-Resolvers.shared.unique.register(Dependency() as DependencyProtocol)
-Resolvers.shared.singletons.register(SingletonDependency() as SingletonDependencyProtocol)
+Resolvers.shared.unique.register { Dependency() as DependencyProtocol }
+Resolvers.shared.singletons.register { SingletonDependency() as SingletonDependencyProtocol }
 ```
 
 Now you can use these dependencies throughout the app using specially defined property wrapper attributes (where the values are initialised automatically with the previously registered values):
