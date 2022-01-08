@@ -84,44 +84,124 @@ final class InjextorTests: XCTestCase {
     func testSingletonDependenciesAreTheSame() {
         let mock = MockDependencyUseCase()
         let anotherMock = MockDependencyUseCase()
-        XCTAssertEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+    }
+    
+    func testSingletonDependenciesAreTheSameWhenValueTypes() {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { MockStructDependency() as MockDependencyType }
+        let mock = MockDependencyUseCase()
+        let anotherMock = MockDependencyUseCase()
+        XCTAssertEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+    }
+    
+    func testSingletonDependenciesAreMutableWhenValueTypes() {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { MockStructDependency() as MockMutableDependencyType }
+        let mock = MockMutableDependencyUseCase()
+        let anotherMock = MockMutableDependencyUseCase()
+        XCTAssertEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value.mutableValue, 0)
+        XCTAssertEqual(anotherMock.mockSingletonDependency.value.mutableValue, 0)
+        mock.mockSingletonDependency.value.mutableValue = 1
+        XCTAssertEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value.mutableValue, 1)
+        XCTAssertEqual(anotherMock.mockSingletonDependency.value.mutableValue, 1)
     }
     
     func testSingletonDependenciesCanBeOverridden() {
         let mock = MockDependencyUseCase()
         let anotherMock = MockDependencyUseCase()
-        anotherMock.mockSingletonDependency = MockDependency()
-        XCTAssertNotEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
+        anotherMock.mockSingletonDependency = Singleton(value: MockDependency())
+        XCTAssertNotEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+    }
+    
+    func testSingletonDependenciesCanBeOverriddenWhenValueTypes() {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { MockStructDependency() as MockDependencyType }
+        let mock = MockDependencyUseCase()
+        let anotherMock = MockDependencyUseCase()
+        anotherMock.mockSingletonDependency = Singleton(value: MockStructDependency())
+        XCTAssertNotEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+    }
+    
+    func testOptionalSingletonDependenciesCanBeOverridenToNil() throws {
+        let mock = MockOptionalDependencyUseCase()
+        let anotherMock = MockOptionalDependencyUseCase()
+        anotherMock.mockSingletonDependency = Singleton(value: nil)
+        let mockSingletonDependency = try XCTUnwrap(mock.mockSingletonDependency.value)
+        XCTAssertNil(anotherMock.mockSingletonDependency.value)
+        XCTAssertNotEqual(mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.value?.uuid)
     }
     
     func testSingletonDependenciesCanBeOverriddenViaInitialization() {
         let mock = MockDependencyUseCase()
-        let anotherMock = MockDependencyUseCase(singletonDependency: .value(MockDependency()))
-        XCTAssertNotEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
+        let anotherMock = MockDependencyUseCase(singletonDependency: .value(Singleton(value: MockDependency())))
+        XCTAssertNotEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+    }
+    
+    func testSingletonDependenciesCanBeOverriddenViaInitializationWhenValueTypes() {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { MockStructDependency() as MockDependencyType }
+        let mock = MockDependencyUseCase()
+        let anotherMock = MockDependencyUseCase(singletonDependency: .value(Singleton(value: MockStructDependency())))
+        XCTAssertNotEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
+    }
+    
+    func testOptionalSingletonDependenciesCanBeOverridenToNilViaInitialization() throws {
+        let mock = MockOptionalDependencyUseCase()
+        let anotherMock = MockOptionalDependencyUseCase(singletonDependency: .value(.init(value: nil)))
+        let mockSingletonDependency = try XCTUnwrap(mock.mockSingletonDependency.value)
+        XCTAssertNil(anotherMock.mockSingletonDependency.value)
+        XCTAssertNotEqual(mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.value?.uuid)
     }
     
     func testSingletonDependenciesNotOverriddenViaInitializationWhenNoneCasePassed() {
         let mock = MockDependencyUseCase()
         let anotherMock = MockDependencyUseCase(singletonDependency: .none)
-        XCTAssertEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
     }
     
-    func testOptionalSingletonDependenciesAreDifferent() throws {
+    func testOptionalSingletonDependenciesNotOverriddenViaInitializationWhenNoneCasePassed() throws {
+        let mock = MockOptionalDependencyUseCase()
+        let anotherMock = MockOptionalDependencyUseCase(singletonDependency: .none)
+        let mockSingletonDependency = try XCTUnwrap(mock.mockSingletonDependency.value)
+        let anotherMockSingletonDependency = try XCTUnwrap(anotherMock.mockSingletonDependency.value)
+        XCTAssertEqual(mockSingletonDependency.uuid, anotherMockSingletonDependency.uuid)
+    }
+    
+    func testOptionalSingletonDependenciesAreTheSame() throws {
         let mock = MockOptionalDependencyUseCase()
         let anotherMock = MockOptionalDependencyUseCase()
-        let mockSingletonDependency = try XCTUnwrap(mock.mockUniqueDependency)
-        let anotherMockSingletonDependency = try XCTUnwrap(anotherMock.mockUniqueDependency)
-        XCTAssertNotEqual(mockSingletonDependency.uuid, anotherMockSingletonDependency.uuid)
+        let mockSingletonDependency = try XCTUnwrap(mock.mockSingletonDependency.value)
+        let anotherMockSingletonDependency = try XCTUnwrap(anotherMock.mockSingletonDependency.value)
+        XCTAssertEqual(mockSingletonDependency.uuid, anotherMockSingletonDependency.uuid)
+    }
+    
+    func testOptionalSingletonDependenciesAreMutableWhenValueTypes() {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { MockStructDependency() as MockMutableDependencyType? }
+        let mock = MockOptionalMutableDependencyUseCase()
+        let anotherMock = MockOptionalMutableDependencyUseCase()
+        XCTAssertNotNil(mock.mockSingletonDependency.value)
+        XCTAssertEqual(mock.mockSingletonDependency.value?.uuid, anotherMock.mockSingletonDependency.value?.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value?.mutableValue, 0)
+        XCTAssertEqual(anotherMock.mockSingletonDependency.value?.mutableValue, 0)
+        mock.mockSingletonDependency.value?.mutableValue = 1
+        XCTAssertNotNil(mock.mockSingletonDependency.value)
+        XCTAssertEqual(mock.mockSingletonDependency.value?.uuid, anotherMock.mockSingletonDependency.value?.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value?.mutableValue, 1)
+        XCTAssertEqual(anotherMock.mockSingletonDependency.value?.mutableValue, 1)
     }
     
     func testSingletonDependenciesAreDifferentAfterAllDependenciesRemovedFromResolvers() {
         let mock = MockDependencyUseCase()
         let anotherMock = MockDependencyUseCase()
-        XCTAssertEqual(mock.mockSingletonDependency.uuid, anotherMock.mockSingletonDependency.uuid)
+        XCTAssertEqual(mock.mockSingletonDependency.value.uuid, anotherMock.mockSingletonDependency.value.uuid)
         removeAllDependencies()
         registerDependencies()
         let aThirdMock = MockDependencyUseCase()
-        XCTAssertNotEqual(mock.mockSingletonDependency.uuid, aThirdMock.mockSingletonDependency.uuid)
+        XCTAssertNotEqual(mock.mockSingletonDependency.value.uuid, aThirdMock.mockSingletonDependency.value.uuid)
     }
     
     func testAlternativeResolversResolveDifferentSingletonDependencies() {
@@ -130,13 +210,13 @@ final class InjextorTests: XCTestCase {
         MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register { newDependency as MockDependencyType }
         let mock = MockDependencyUseCase()
         let alternativeMock = MockDependencyUseCaseWithAlternativeResolvers()
-        XCTAssertNotEqual(mock.mockSingletonDependency.uuid, alternativeMock.mockSingletonDependency.uuid)
+        XCTAssertNotEqual(mock.mockSingletonDependency.value.uuid, alternativeMock.mockSingletonDependency.value.uuid)
     }
     
     func testAlternativeResolversResolveSameUniqueDependenciesWhenSameAreRegistered() {
         let mock = MockDependencyUseCase()
         MockDependencyUseCaseWithAlternativeResolvers.uniqueResolver.register { mock.mockUniqueDependency as MockDependencyType }
-        MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register { mock.mockSingletonDependency as MockDependencyType }
+        MockDependencyUseCaseWithAlternativeResolvers.singletionResolver.register { mock.mockSingletonDependency.value as MockDependencyType }
         let alternativeMock = MockDependencyUseCaseWithAlternativeResolvers()
         XCTAssertEqual(mock.mockUniqueDependency.uuid, alternativeMock.mockUniqueDependency.uuid)
     }
@@ -155,6 +235,22 @@ final class InjextorTests: XCTestCase {
         XCTAssertNil(mock.mockUniqueDependency)
         mock.mockUniqueDependency = MockDependency()
         XCTAssertNotNil(mock.mockUniqueDependency)
+    }
+    
+    func testOptionalSingletonDependenciesCanBeRegisteredAsNil() throws {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { nil as MockDependencyType? }
+        let mock = MockOptionalDependencyUseCase()
+        XCTAssertNil(mock.mockSingletonDependency.value)
+    }
+    
+    func testOptionalSingletonDependenciesRegisteredAsNilCanBeOverriddenToNotNil() throws {
+        removeAllDependencies()
+        Resolvers.shared.singletons.register { nil as MockDependencyType? }
+        let mock = MockOptionalDependencyUseCase()
+        XCTAssertNil(mock.mockSingletonDependency.value)
+        mock.mockSingletonDependency = Singleton(value: MockDependency())
+        XCTAssertNotNil(mock.mockSingletonDependency.value)
     }
     
     private func registerDependencies() {

@@ -11,10 +11,10 @@ import Foundation
 class MockOptionalDependencyUseCase {
     
     @Dependency var mockUniqueDependency: MockDependencyType?
-    @SingletonDependency var mockSingletonDependency: MockDependencyType?
+    @SingletonDependency var mockSingletonDependency: Singleton<MockDependencyType?>
     
     init(uniqueDependency: DependencyOverride<MockDependencyType?> = .none,
-         singletonDependency: DependencyOverride<MockDependencyType?> = .none) {
+         singletonDependency: SingletonOverride<MockDependencyType?> = .none) {
         $mockUniqueDependency.override(with: uniqueDependency)
         $mockSingletonDependency.override(with: singletonDependency)
     }
