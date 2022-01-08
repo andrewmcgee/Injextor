@@ -34,8 +34,8 @@ In sum, all dependecies must first be registered with a revolver. Objects can th
 
 ## Usage
 
-All resolvers must conform to the `ResolverType` protocol. There are two concrete implementaions of this protocol provided. A `Resolver` handles unique dependencies, whilst a `SingletonResolver` handles shared singletons.
-For simplicity there is also a `Resolvers` singleton class, which stores 2 x default `ResolverType` values as properties - one for unique dependencies and the other for singletons. (Please note: These can be overridden if you wish, or you can store you own `ResolverType` values in a place of your own choosing.)
+There are two default resolvers provided. A `UniqueResolver` handles unique dependencies, whilst a `SingletonResolver` handles shared singletons.
+For simplicity there is also a `Resolvers` singleton class, which stores default instances of the above as properties - one for unique dependencies and the other for singletons. (Please note: These can be overridden if you wish, or you can store you own `ResolverType` values in a place of your own choosing.)
 
 The easiest way to register dependencies is to use the `Resolvers` class to register dependencies as follows:
 
@@ -44,7 +44,7 @@ Resolvers.shared.unique.register { Dependency() }
 Resolvers.shared.singletons.register { SingletonDependency() }
 ```
 
-Alternatively, if you are abstracting types behind protocols then remember to add `as <DependencyProtocol>?`:
+Alternatively, if you are abstracting types behind protocols then remember to add `as <DependencyProtocol>`:
 
 ```
 Resolvers.shared.unique.register { Dependency() as DependencyProtocol }
@@ -57,12 +57,20 @@ Now you can use these dependencies throughout the app using specially defined pr
 class SomeType {
     
     @Dependency var uniqueDependency: DependencyType
-    @SingletonDependency var singletonDependency: SingletonDependencyType
+    @SingletonDependency var singletonDependency: Singleton<SingletonDependencyType>
     
 }
+```
+
+Please note: Although unique and singleton dependencies are both registered in the same way, when they are accessed as dependencies singletons are automatically wrapped in the generic `Singleton` class. You can access the singleton value as follows:
 
 ```
-Please note: If you want to use alternative `ResolverType` values from those owned by the `Resolvers` singleton class, then you can inject them into the property wrappers as follows:
+singletonDependency.value
+```
+
+This difference provides the added benefit of being able to use both reference and value types as singletons.
+
+If you want to use alternative `ResolverType` values from those owned by the `Resolvers` singleton class, then you can inject them into the property wrappers as follows:
 
 ```
 @Dependency(resolver: someResolver) var uniqueDependency: DependencyType
