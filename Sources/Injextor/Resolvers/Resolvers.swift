@@ -15,11 +15,11 @@ public class Resolvers {
     /// Holds a singleton instance of `Resolvers`.
     public static let shared = Resolvers()
 
-    /// Holds a default instance of `ResolverType` used to resolve unique dependencies.
-    public var unique: ResolverType = Resolver()
+    /// Holds a default instance of `UniqueResolverType` used to resolve unique dependencies.
+    public var unique: UniqueResolverType = UniqueResolver()
     
-    /// Holds a default instance of `ResolverType` used to resolve singleton dependencies.
-    public var singletons: ResolverType = SingletonResolver()
+    /// Holds a default instance of `SingletonResolverType` used to resolve singleton dependencies.
+    public var singletons: SingletonResolverType = SingletonResolver()
     
     /// Makes the `init` private.
     private init() {}
