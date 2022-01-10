@@ -15,8 +15,10 @@ public class UniqueResolver: UniqueResolverType {
     
     /// Registers a dependency wrapped in a closure for dependency injection with this resolver.
     ///  - parameter builder: A closure used to build a dependency.
-    public func register<T>(_ builder: @escaping () -> T) {
+    ///  - returns: A `@discardableResult` of `Self` to enable functional chaining of this method.
+    @discardableResult public func register<T>(_ builder: @escaping () -> T) -> Self {
         builders[ObjectIdentifier(T.self)] = builder
+        return self
     }
     
     /// Resolves a dependency that has been previously registered with this resolver. In each case it will be a new instance.

@@ -12,7 +12,8 @@ public protocol SingletonResolverType {
     
     /// Registers a dependency, wrapped in a closure for dependency injection with this resolver.
     ///  - parameter builder: A closure used to build a dependency.
-    func register<T>(_ builder: @escaping () -> T)
+    ///  - returns: A `@discardableResult` of `Self` to enable functional chaining of this method.
+    @discardableResult func register<T>(_ builder: @escaping () -> T) -> Self
     
     /// Resolves a dependency that has been previously registered with this resolver. In each case it will be the same `Singleton` instance.
     /// - Returns: A `Singleton` instance of a type that has been previously registered with this resolver.

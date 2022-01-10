@@ -254,10 +254,12 @@ final class InjextorTests: XCTestCase {
     }
     
     private func registerDependencies() {
-        Resolvers.shared.unique.register { MockDependency() as MockDependencyType }
-        Resolvers.shared.singletons.register { MockDependency() as MockDependencyType }
-        Resolvers.shared.unique.register { MockDependency() as MockDependencyType? }
-        Resolvers.shared.singletons.register { MockDependency() as MockDependencyType? }
+        Resolvers.shared.unique
+            .register { MockDependency() as MockDependencyType }
+            .register { MockDependency() as MockDependencyType? }
+        Resolvers.shared.singletons
+            .register { MockDependency() as MockDependencyType }
+            .register { MockDependency() as MockDependencyType? }
     }
     
     private func removeAllDependencies() {
