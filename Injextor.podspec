@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = 'Injextor'
-  s.version          = '0.5.0'
+  s.version          = '1.0.0'
   s.summary          = 'A simple way to handle dependency injection using property wrappers.'
   s.homepage         = 'https://github.com/andrewmcgee/Injextor'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
