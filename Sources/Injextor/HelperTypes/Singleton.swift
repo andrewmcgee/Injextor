@@ -11,11 +11,11 @@ import Foundation
 public class Singleton<T> {
     
     /// The singleton wrapped value.
-    var value: T
+    public var value: T
     
     /// Initializes a Singleton for the given wrapped value.
     /// - Parameter value: The singleton value to wrap.
-    init(value: T) {
+    public init(value: T) {
         self.value = value
     }
 }
