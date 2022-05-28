@@ -9,7 +9,7 @@ import Foundation
 
 /// Property wrapper to hold a `Singleton` depdency.
 @propertyWrapper
-class SingletonDependency<T> {
+public class SingletonDependency<T> {
   
     /// Stores the `SingletonResolverType` to be used to resolve the dependency.
     let resolver: SingletonResolverType
