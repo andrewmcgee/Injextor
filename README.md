@@ -17,7 +17,7 @@ https://github.com/andrewmcgee/Injextor
 Injextor can be added to a project as a cocoa pod by adding the following to your `Podfile` under the correct target:
 
 ```
-pod 'Injextor', '~> '1.2.0'
+pod 'Injextor', '~> 1.3.0'
 ```
 
 and then running the following command in your terminal:
